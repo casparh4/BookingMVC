@@ -1,0 +1,39 @@
+﻿@model Booking
+<div style="width:70%; float:left">
+<form asp-action="CreateBooking" asp-route-id="@ViewBag.HotelId" method="post" role="form">
+    <h3>Book your stay at @ViewBag.HotelName</h3>
+    <div>
+        <label asp-for="FirstName" class="form-label"></label>
+        <input asp-for="FirstName" class="form-control" />
+        <span asp-validation-for="FirstName" class="text-danger"></span>
+    </div>
+    <div>
+        <label asp-for="LastName" class="form-label"></label>
+        <input asp-for="LastName" class="form-control" />
+        <span asp-validation-for="LastName" class="text-danger"></span>
+    </div>
+    <div>
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" type ="email"class="text-danger"></span>
+    </div>
+    <div>
+        <label asp-for="Arrival" class="form-label"></label>
+        <input asp-for="Arrival" type="date" class="form-control" />
+        <span asp-validation-for="Arrival" class="text-danger"></span>
+    </div>
+    <div>
+        <label asp-for="Leaving" class="form-label"></label>
+        <input asp-for="Leaving" type="date" class="form-control" />
+        <span asp-validation-for="Leaving" class="text-danger"></span>
+    </div>
+    <hr />
+    <div>
+        <input type="submit" class="btn btn-secondary" value="Request Booking" />
+    </div>
+    
+</form>
+</div>
+<div style="width:30%; float:right; text-align:center">
+    <img src="@ViewBag.HotelImageURl" width="400" height="400"/>
+</div>

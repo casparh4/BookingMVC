@@ -1,0 +1,78 @@
+﻿@model DetailsViewModel
+<div class="details-container">
+    <div class="hotel-section">
+ <h1>@Model.Hotel.Name</h1>
+ <h3>@Model.Hotel.City, @Model.Hotel.Country</h3>
+
+  <h2><img src="@Model.Hotel.ImageUrl" height="400" width="400"/></h2>
+
+  <h4>@Model.Hotel.Description</h4>
+        <h4>
+            @Model.Hotel.Rating ⭐
+        </h4>
+
+  <hr />
+  <h3>@Model.Hotel.Price.ToString("C") per night</h3>
+  <div class="book">
+    <p class="button" height="100" width="300">
+    <a class="btn btn-secondary" 
+    asp-controller="Booking"
+    asp-action="CreateBooking"
+    asp-route-Id="@Model.Hotel.HotelId">Book your stay</a>
+    </p>
+  </div>
+    </div>
+
+  <div class="review-section">
+    <h2>Leave a Review</h2>
+    
+    <form asp-action="Details" asp-route-Id="@Model.NewReview.HotelId" method="post" role="form">
+        <label asp-for="NewReview.FirstName" class="form-label"></label>
+        <input asp-for="NewReview.FirstName" class="form-control" />
+        <span asp-validation-for="NewReview.FirstName" class="text-danger"></span>
+        <hr />
+        <label asp-for="NewReview.LastName" class="form-label"></label>
+        <input asp-for="NewReview.LastName" class="form-control" />
+        <span asp-validation-for="NewReview.LastName" class="text-danger"></span>
+         <hr />
+        <label asp-for="NewReview.Rating" class="form-label"></label>
+        <select asp-for="NewReview.Rating" class="form-control">
+        <option value="">-- Select Rating --</option>
+        <option value="1">1 Star</option>
+        <option value="2">2 Stars</option>
+        <option value="3">3 Stars</option>
+        <option value="4">4 Stars</option>
+        <option value="5">5 Stars</option>
+        </select>
+      <span asp-validation-for="NewReview.Rating" class="text-danger"></span>
+      <hr />
+        <label asp-for="NewReview.Comments" class="form-label"></label>
+        <textarea asp-for="NewReview.Comments" class="form-control"></textarea>
+        <span asp-validation-for="NewReview.Comments" class="text-danger"></span>
+        <hr />
+    <div>
+                <input type="submit" class="btn btn-secondary" value="Submit"/>
+                <p>@ViewBag.ReviewCompletionMessage</p>
+    </div>
+    </form>
+    </div>
+   
+    <div class="Reviews">
+     @foreach (var review in Model.Hotel.Reviews)
+     {
+            <div class="saved-review">
+                <h4>
+                    @review.Rating ⭐
+                </h4>
+            <p>"@review.Comments"</p>
+            <cite>- @review.FirstName @review.LastName</cite>
+            </div>
+     }
+    </div>
+
+        
+
+
+</div>
+
+

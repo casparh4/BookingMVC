@@ -1,0 +1,17 @@
+﻿@{
+    ViewData["Title"] = "HotelsForyou";
+}
+@model HotelViewModel
+<div class="text-center">
+    <h1 class="display-4">Welcome to HotelsForYou</h1>
+</div>
+<hr />
+<h2> Hotels</h2>
+<div style="display:flex; flex-wrap:wrap;">
+@foreach(var hotel in Model.Hotels)
+{
+    <div style="width:33%; padding:15px; text-align:center;">
+        <partial name="_HotelCard" model="hotel" />
+    </div>
+}
+</div>

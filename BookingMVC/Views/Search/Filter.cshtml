@@ -1,0 +1,42 @@
+﻿@model SearchViewModel
+
+<div style="height:10%">
+<form style="" asp-action="Filter" method="post" role="form">
+    <span>
+        <label asp-for="Search.Name" class="form-label"></label>
+        <input asp-for="Search.Name" class="form-control" />
+    </span>
+    <span>
+        <label asp-for="Search.Country" class="form-label"></label>
+        <input asp-for="Search.Country" class="form-control" />
+    </span>
+    <span>
+        <label asp-for="Search.City" class="form-label"></label>
+        <input asp-for="Search.City" class="form-control" />
+    </span>
+    <span>
+        <label asp-for="Search.Rating" class="form-label"></label>
+        <select asp-for="Search.Rating" type="radio" class="form-control">
+            <option value="">-- Select Rating --</option>
+            <option value="1">1 Star</option>
+            <option value="2">2 Stars</option>
+            <option value="3">3 Stars</option>
+            <option value="4">4 Stars</option>
+            <option value="5">5 Stars</option>
+            </select>
+    </span>
+    <hr />
+    <div>
+        <input type="submit" class="btn btn-secondary" value="find hotels" />
+    </div>
+    </form>
+</div>
+<h2> Hotels</h2>
+<div style="display:flex; flex-wrap:wrap;">
+    @foreach (var hotel in Model.Hotels)
+    {
+        <span style="padding:25px; text-align:center">
+            <partial name="_HotelCard" model="hotel" />
+        </span>
+    }
+</div>
