@@ -1,4 +1,6 @@
-﻿namespace BookingMVC.Models
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace BookingMVC.Models
 {
     public interface IBookingRepository
     {
@@ -7,5 +9,9 @@
         public void CreateBooking(Booking booking);
 
         Booking? GetBooking(int id);
+
+        Task<IEnumerable<Booking>> GetBookingsAsync(int hotelId);
+
+        IEnumerable<Booking> GetAllBookings();
     }
 }

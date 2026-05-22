@@ -4,6 +4,8 @@
 <h4>your stay at @Model.Hotel.Name has been saved from @Model.Arrival.ToString("yyyy-MM-dd") - @Model.Leaving.ToString("yyyy-MM-dd")</h4>
 
 <h4>Total Cost: @Model.TotalCost.ToString("c")</h4>
+<p>please check your inbox for your email: @Model.Email for more information</p>
+
 <h4>to confirm your booking, please proceed to payment</h4>
     <div>
         <p class="button" height="100" width="300">
@@ -11,6 +13,7 @@
         </p>
     </div>
 </div>
+
 
 <div style="width:30%; float:right">
     <img src="@Model.Hotel.ImageUrl" />

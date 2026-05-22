@@ -4,7 +4,13 @@ using BookingMVC.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Validation;
+using OpenAI;
+using OpenAI.Chat;
+using System.Linq.Expressions;
+using System.Text;
 
 namespace BookingMVC.Controllers
 {
@@ -14,25 +20,49 @@ namespace BookingMVC.Controllers
 
         private readonly IHotelRepository _hotelRepository;
         private readonly UserManager<IdentityUser> _userManager;
-        public HotelController(IHotelRepository hotelRepository, UserManager<IdentityUser> userManager)
+        private readonly IOptions<ModelSettings> _modelSettings;
+        private readonly OpenAIClient _aiClient;
+        public HotelController(IHotelRepository hotelRepository, UserManager<IdentityUser> userManager, IOptions<ModelSettings> modelSettings, OpenAIClient aiClient)
         {
             _hotelRepository = hotelRepository;
             _userManager = userManager;
+            _aiClient = aiClient;
+            _modelSettings = modelSettings;
         }
 
-        public IActionResult Details(int Id) 
-        {
-            var hotel = _hotelRepository.GetHotelById(Id);
-            
-            Review NewReview = new Review();
-            NewReview.HotelId = Id;
-            if(hotel == null)
-            {
-                return NotFound();
-            }
-            var detailsViewModel = new DetailsViewModel(hotel, NewReview);
 
-            return View(detailsViewModel);
+        [HttpPost]
+        public async Task<IActionResult> UpdateReviewSummary(int id) 
+        {
+            await _hotelRepository.UpdateReviewSummary(id);
+
+            return RedirectToAction(nameof(Details), new {id=id});
+        }
+
+
+        public async Task<IActionResult> Details(int id) 
+        {
+            var hotel = _hotelRepository.GetHotelById(id);
+            if (hotel !=null)
+            {
+
+
+                Review NewReview = new Review();
+                NewReview.HotelId = id;
+                if (hotel == null)
+                {
+                    return NotFound();
+                }
+                var detailsViewModel = new DetailsViewModel(hotel, NewReview);
+
+                return View(detailsViewModel);
+            }
+     
+            else
+            {
+                throw new Exception("Hotel not found");
+            }
+     
         }
 
         [Authorize]
@@ -52,23 +82,15 @@ namespace BookingMVC.Controllers
                 
                 ViewBag.ReviewCompletionMessage = "invalid review";
                 return View(incompleteDetailsViewModel);
-
-                //return RedirectToAction("Details", new { Id = Id});
-
             }
-            
-
             var user = await _userManager.GetUserAsync(User);
-            NewReview.FirstName = user.UserName;
-            
+            if(user!= null)
+            {
+                NewReview.Email = user.UserName;
+            }
+
             _hotelRepository.CreateReview(Id, NewReview);
 
-           
-            
-            
-
-
-            
             ViewBag.ReviewCompletionMessage = "thanks for the review!";
 
             var detailsViewModel = new DetailsViewModel(hotel, NewReview); //make a new viewmodel with just hotel and string

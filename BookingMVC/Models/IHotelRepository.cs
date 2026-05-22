@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace BookingMVC.Models
 {
@@ -11,5 +12,14 @@ namespace BookingMVC.Models
         IEnumerable<Hotel> FilterHotels(Search search);
 
         void CreateReview(int Id,Review review);
+
+        public Task<int> AddHotelAsync(Hotel hotelToAdd);
+        public Task<int> DeleteHotelAsync(int hotelId);
+
+        Task<int> UpdateReviewSummary(int id);
+
+        string GetReviewsStringByHotelName(string hotelName);
+
+        Hotel? GetHotelByName(string hotelName);
     }
 }

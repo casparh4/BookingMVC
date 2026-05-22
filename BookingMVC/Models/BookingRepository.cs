@@ -34,5 +34,10 @@ namespace BookingMVC.Models
         {
             return await _dbContext.Bookings.Where(b => b.Hotel.HotelId == hotelId).ToListAsync();
         }
+
+        public  IEnumerable<Booking> GetAllBookings()
+        {
+            return _dbContext.Bookings.Include(h => h.Hotel).ToList();
+        }
     }
 }
