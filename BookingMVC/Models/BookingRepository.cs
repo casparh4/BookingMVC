@@ -30,6 +30,9 @@ namespace BookingMVC.Models
             return _dbContext.Bookings.Include(b=>b.Hotel).FirstOrDefault(B => B.BookingId == id);
         }
 
-
+        public async Task<IEnumerable<Booking>?> GetBookingsAsync(int hotelId)
+        {
+            return await _dbContext.Bookings.Where(b => b.Hotel.HotelId == hotelId).ToListAsync();
+        }
     }
 }

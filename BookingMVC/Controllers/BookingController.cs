@@ -31,11 +31,17 @@ namespace BookingMVC.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult CreateBooking(int id, Booking booking)
+        public async Task<IActionResult> CreateBooking(int id, Booking booking)
         {
             _bookingRepository.Hotel = _hotelRepository.GetHotelById(id);
 
-            if(ModelState.IsValid)
+            var user = await _userManager.GetUserAsync(User);
+            
+            
+                booking.Email = user.UserName;
+            }
+
+            if (ModelState.IsValid)
             {
                 _bookingRepository.CreateBooking(booking);
                 return RedirectToAction("BookingConfirmation", 
