@@ -1,7 +1,9 @@
 ﻿@model Booking
 <div style="width:70%; float:left">
-<form asp-action="CreateBooking" asp-route-id="@ViewBag.HotelId" method="post" role="form">
-    <h3>Book your stay at @ViewBag.HotelName</h3>
+    <form asp-action="CreateBooking" asp-route-hotelId="@Model.Hotel.HotelId" method="post" role="form">
+ 
+
+    <h3>Book your stay at @Model.Hotel.Name</h3>
     <div>
         <label asp-for="FirstName" class="form-label"></label>
         <input asp-for="FirstName" class="form-control" />
@@ -12,11 +14,7 @@
         <input asp-for="LastName" class="form-control" />
         <span asp-validation-for="LastName" class="text-danger"></span>
     </div>
-    <div>
-        <label asp-for="Email" class="form-label"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" type ="email"class="text-danger"></span>
-    </div>
+
     <div>
         <label asp-for="Arrival" class="form-label"></label>
         <input asp-for="Arrival" type="date" class="form-control" />
@@ -35,5 +33,5 @@
 </form>
 </div>
 <div style="width:30%; float:right; text-align:center">
-    <img src="@ViewBag.HotelImageURl" width="400" height="400"/>
+    <img src="@Model.Hotel.ImageUrl" width="400" height="400"/>
 </div>

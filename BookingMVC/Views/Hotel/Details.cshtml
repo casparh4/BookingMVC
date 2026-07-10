@@ -4,11 +4,11 @@
  <h1>@Model.Hotel.Name</h1>
  <h3>@Model.Hotel.City, @Model.Hotel.Country</h3>
 
-  <h2><img src="@Model.Hotel.ImageUrl" height="400" width="400"/></h2>
+  <h2><img class="hotel-image" src="@Model.Hotel.ImageUrl"/></h2>
 
   <h4>@Model.Hotel.Description</h4>
         <h4>
-            @Model.Hotel.Rating ⭐
+            @Model.Hotel.Rating ⭐ (@Model.Hotel.Reviews.Count() reviews)
         </h4>
 
   <hr />
@@ -56,23 +56,30 @@
     </div>
     </form>
     </div>
-   
-    <div class="Reviews">
-     @foreach (var review in Model.Hotel.Reviews)
-     {
-            <div class="saved-review">
-                <h4>
-                    @review.Rating ⭐
-                </h4>
-            <p>"@review.Comments"</p>
-            <cite>- @review.FirstName @review.LastName</cite>
-            </div>
-     }
+
+    <div class="review-summary">
+        <form asp-action="UpdateReviewSummary" asp-route-id="@Model.Hotel.HotelId">
+            <input type="submit" value="AI Review Analysis" />
+        </form>
+        <h6>@Model.Hotel.ReviewSummary</h6>
     </div>
 
         
 
 
+</div>
+<div class="Reviews">
+    @foreach (var review in Model.Hotel.Reviews)
+    {
+        <div class="saved-review">
+            <h4>
+                @review.Rating ⭐
+            </h4>
+            <p>"@review.Comments"</p>
+            <cite>- @review.FirstName @review.LastName</cite>
+            <p><small><i>@review.Email</i></small></p>
+        </div>
+    }
 </div>
 
 

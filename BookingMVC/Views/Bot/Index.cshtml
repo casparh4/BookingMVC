@@ -1,0 +1,41 @@
+﻿
+@model ChatBotViewModel
+
+
+ @if(Model.UserChatMessages.Count >0 && Model.AssistantChatMessages.Count > 0)
+{
+    for(int i=0; i<Model.AssistantChatMessages.Count; i++)
+    {
+        <div class="user-message"><b>You:</b> @Model.UserChatMessages[i]</div>
+        <div class="bot-message"><b>Assistant:</b> @Html.Raw(@Model.AssistantChatMessages[i].Message)
+           @if(Model.AssistantChatMessages[i].Hotel != null)
+            { 
+                <div style="width:33%; padding:15px; text-align:center;">
+                    <partial name="_HotelCard" model="Model.AssistantChatMessages[i].Hotel" />
+                </div>
+             } 
+
+        </div>
+
+        
+    }
+ } 
+
+<form class="bot-chat" asp-action="Index">
+    <label asp-for="UserMessage" class="form-label"></label>
+    <textarea asp-for="UserMessage" placeholder="" class="form-control"></textarea>
+
+
+    @for (int i = 0; i < Model.UserChatMessages.Count; i++)
+    {
+        <input type="hidden" asp-for="UserChatMessages[i]" />
+    }
+    @for (int i = 0; i < Model.AssistantChatMessages.Count; i++)
+    {
+        <input type="hidden" asp-for="AssistantChatMessages[i].Message" />
+        <input type="hidden" asp-for="AssistantChatMessages[i].Hotel" />
+    }
+
+    <input type="submit" class="btn btn-secondary" value="Submit" />
+   
+</form>

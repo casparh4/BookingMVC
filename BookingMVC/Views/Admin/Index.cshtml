@@ -1,0 +1,52 @@
+﻿@{
+    ViewData["Title"] = "HotelsForyou";
+}
+@model HotelViewModel
+@if (User.IsInRole("Admin"))
+{
+    @if (!Model.Hotels.Any())
+    {
+        <p> No Hotels to Display</p>
+    }
+    @if (TempData["HotelAdded"] != null)
+    {
+        <p class="text-success"> @TempData["HotelAdded"]</p>
+    }
+    @if (TempData["HotelDeleted"] != null)
+    {
+        <p class="text-success"> @TempData["HotelDeleted"]</p>
+    }
+
+    
+    
+        <table class="table table-condensed table-bordered">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Location</th>
+                <th>Actions</th>
+            </tr>
+            @foreach (var hotel in Model.Hotels)
+            {
+                <tr>
+                    <td>@hotel.HotelId</td>
+                    <td>@hotel.Name</td>
+                    <td>@hotel.Price</td>
+                    <td>@hotel.City, @hotel.Country</td>
+                    <td>
+                        <a asp-action="Bookings" asp-route-hotelId="@hotel.HotelId">Bookings</a>
+                        <a asp-action="Delete" asp-route-hotelId="@hotel.HotelId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </table>
+
+        <a class="btn btn-primary" asp-controller="Admin" asp-action="Add">Add a new Hotel</a>
+    
+}       
+else
+{
+    <p>You do not have access to this page</p>
+}
+

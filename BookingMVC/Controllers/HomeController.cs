@@ -1,4 +1,4 @@
-using BookingMVC.Models;
+using BookingMVC.Models.Repositories;
 using BookingMVC.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;

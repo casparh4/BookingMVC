@@ -1,0 +1,32 @@
+﻿@model BookingsViewModel
+
+<h3>Bookings for @Model.Hotel.Name</h3>
+
+@if(!Model.Bookings.Any())
+{
+    <p>No bookings to display</p>
+    
+}
+else
+{
+    <table class="table table-condensed table-bordered">
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Contact email</th>
+            <th>Date</th>
+            <th>Total cost</th>
+
+        </tr>
+        @foreach(var booking in Model.Bookings)
+        {
+            <tr>
+                <td>@booking.BookingId</td>
+                <td>@booking.FirstName @booking.LastName</td>
+                <td>@booking.Email</td>
+                <td>@booking.Arrival - @booking.Leaving</td>
+                <td>@booking.TotalCost</td>
+            </tr>
+        }
+    </table>
+}

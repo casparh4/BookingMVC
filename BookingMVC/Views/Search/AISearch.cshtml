@@ -1,0 +1,26 @@
+﻿@model AISearchViewModel
+<div style="height:10%">
+    <form style="" asp-action="AISearch" method="post" role="form">
+        <span>
+            <label asp-for="KeyWords" class="form-label"></label>
+            <input asp-for="KeyWords" class="form-control" />
+        </span>
+      
+        <div>
+            <input type="submit" class="btn btn-secondary" value="find hotels" />
+        </div>
+    </form>
+</div>
+<div>
+    @if( Model.Hotels != null)
+    {
+        @foreach (var hotel in Model.Hotels)
+        {
+            <div style="width:33%; padding:15px; text-align:center;">
+                <partial name="_HotelCard" model="hotel" />
+            </div>
+        }
+    }
+
+</div>
+</div>
