@@ -29,6 +29,11 @@
        <input asp-for="Price" type="number" class="form-control" />
     <span asp-validation-for="Price" class="text-danger"></span>
 </div>
+    <div>
+        <label asp-for="Rooms" class="form-label"></label>
+        <input asp-for="Rooms" type="number" class="form-control" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
 <div>
     <label asp-for="Description" class="form-label"></label>
     <textarea asp-for="Description"  class="form-control">Description</textarea>
@@ -41,6 +46,11 @@
     <span asp-validation-for="ImageUrl" class="text-danger"></span>
         <input type="submit" value="generate" asp-action="GenerateImage" />
 </div>
+    <div>
+        <label asp-for="AirportAitaCode" class="form-label"></label>
+        <input asp-for="AirportAitaCode" class="form-control" />
+        <span asp-validation-for="AirportAitaCode" class="text-danger"></span>
+    </div>
 <div>
         <input type="submit" asp-action="SubmitAddition" value="Add Hotel" class="btn btn-primary" onclick="javascript: return confirm('Are you sure you want to add this hotel?');" />
 </div>

@@ -1,8 +1,11 @@
 ﻿using BookingMVC.Models;
+using BookingMVC.Models.POCOs;
+using BookingMVC.Models.Repositories;
 using BookingMVC.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace BookingMVC.Controllers
 {
@@ -11,66 +14,107 @@ namespace BookingMVC.Controllers
     {
         private readonly IBookingRepository _bookingRepository;
         private readonly IHotelRepository _hotelRepository;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<IdentityUser>? _userManager;
+        private readonly IFlightStackAPIRepository _flightStack;
+      
 
-        public BookingController(IBookingRepository bookingRepository, IHotelRepository hotelRepository, UserManager<IdentityUser> userManager)
+        public BookingController(IBookingRepository bookingRepository, IHotelRepository hotelRepository, UserManager<IdentityUser>? userManager, IFlightStackAPIRepository flightStack)
         {
-            _bookingRepository = bookingRepository;
-            _hotelRepository = hotelRepository;
-            _userManager = userManager;
+            _bookingRepository = bookingRepository ?? throw new ArgumentNullException(nameof(_bookingRepository));
+            _hotelRepository = hotelRepository ?? throw new ArgumentNullException(nameof(_hotelRepository));
+            _userManager = userManager ?? throw new ArgumentNullException(nameof(_userManager));
+            _flightStack = flightStack ?? throw new ArgumentNullException(nameof(_flightStack));
+ 
         }
 
-        
+
         public IActionResult CreateBooking(int id)
         {
 
             _bookingRepository.Hotel = _hotelRepository.GetHotelById(id);
-            if (_bookingRepository.Hotel == null)
-            {
-                return NotFound();
-            }
-            ViewBag.HotelId = _bookingRepository.Hotel.HotelId;
-            ViewBag.HotelName = _bookingRepository.Hotel.Name;
-            ViewBag.HotelImageURL = _bookingRepository.Hotel.ImageUrl;
 
-            return View();
+            var booking = new Booking()
+            {
+                Hotel = _bookingRepository.Hotel ?? throw new Exception("this hotel is currently unavailable to book"),
+                Arrival = DateTime.UtcNow,
+                Leaving = DateTime.UtcNow
+                
+            };
+           
+            return View(booking);
         }
         [HttpPost]
-        public async Task<IActionResult> CreateBooking(int id, Booking booking)
+        [Authorize]
+        public async Task<IActionResult> CreateBooking( int hotelId, Booking booking)
         {
-            _bookingRepository.Hotel = _hotelRepository.GetHotelById(id);
+             var user = await _userManager.GetUserAsync(User) ?? throw new ArgumentNullException("user must be logged in ");
 
-            var user = await _userManager.GetUserAsync(User);
+              _bookingRepository.Hotel = _hotelRepository.GetHotelById(hotelId) ?? throw new ArgumentNullException($"hotel could not be booked");
+               booking.Email = user.UserName.ToString();
+            
+            
+         
+            if(!await _bookingRepository.HotelIsAvailable( booking))
+            {
+                return View("_Error", new ErrorViewModel() { Message = $"{_bookingRepository.Hotel.Name} is fully booked between {booking.Arrival}-{booking.Leaving}" });
+            }
 
-            ModelState.Remove("booking.Email");
-            if(user != null && user.UserName !=null)
+            if (_bookingRepository.CreateBooking(booking)>0) 
             {
-                booking.Email = user.UserName.ToString();
-            }
-            else
-            {
-                return View(booking);
-            }
-            if (ModelState.IsValid) //email is invalid here because bool only changed once booking is first gened
-            {
-                _bookingRepository.CreateBooking(booking); //pass user in here an do it repo level maybe??
-                return RedirectToAction("BookingConfirmation", 
-                    new 
-                    { 
-                        id=booking.BookingId
+
+                return RedirectToAction("BookingConfirmation",
+                    new
+                    {
+                        id = booking.BookingId
                     });
             }
 
             return View(booking);
         }
 
-        public IActionResult BookingConfirmation(int id)
+        public async Task <IActionResult> BookingConfirmation(int id, bool showFlights, int offset = 0, CancellationTokenSource cancellationTokenSource = default)
         {
+            try
+            {
+                cancellationTokenSource = new();
+                cancellationTokenSource.CancelAfter(60000);
 
-            var booking =_bookingRepository.GetBooking(id);
-            return View(booking);
+                var booking = await _bookingRepository.GetBookingAsync(id, cancellationTokenSource.Token);
+                if (booking == null)
+                {
+                    return NotFound($"could not find requested booking from ID:{id}");
+                }
+                var flights = new RootObject();
+                if (showFlights)
+                {
+                    flights = await _flightStack.GetFutureFlightsAsync(booking, offset, cancellationTokenSource.Token);
+
+                }
+                var viewModel = new FlightViewModel(booking, flights, offset);
+                return View(viewModel);
+            }
+            catch(OperationCanceledException ex)
+            {
+                return View("_Error", new ErrorViewModel() { Message= ex.Message} );
+            }
+      
+        } 
+
+        [HttpPost]
+        public async Task<IActionResult> BookingConfirmationWithFlights(int id, CancellationTokenSource cancellationTokenSource) //pass in booking id here instead
+        {
+            cancellationTokenSource = new();
+            cancellationTokenSource.CancelAfter(6000);
+            var booking = await _bookingRepository.GetBookingAsync(id, cancellationTokenSource.Token); // add token here
+            if (booking == null)
+            {
+                throw new Exception();
+            }
+            return RedirectToAction(nameof(BookingConfirmation), new {id=id, showFlights=true });
 
         }
-        
     }
+
 }
+    
+

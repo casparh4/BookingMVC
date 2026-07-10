@@ -1,11 +1,12 @@
 using BookingMVC.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using BookingMVC.Utilities;
+
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Options;
-using BookingMVC;
 using OpenAI;
+using BookingMVC.Models.Repositories;
+using BookingMVC.Models.POCOs;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("BookingDbContextConnection") ?? throw new InvalidOperationException("Connection string 'BookingDbContextConnection' not found.");;
@@ -16,7 +17,9 @@ builder.Services.AddControllers();
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<IHotelRepository, HotelRepository>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
-builder.Services.AddTransient<IEmailSender, Mail>();
+builder.Services.AddScoped<IFlightStackAPIRepository, FlightStackAPIRepository>();
+
+
 builder.Services.AddDbContext<BookingDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration["ConnectionStrings:BookingDbContextConnection"]);

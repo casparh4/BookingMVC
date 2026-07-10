@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 
-namespace BookingMVC.Models
+namespace BookingMVC.Models.Repositories
 {
     public interface IHotelRepository
     {

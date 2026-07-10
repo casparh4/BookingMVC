@@ -1,4 +1,6 @@
 ﻿using BookingMVC.Models;
+using BookingMVC.Models.POCOs;
+using BookingMVC.Models.Repositories;
 using BookingMVC.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp;
@@ -149,9 +151,6 @@ namespace BookingMVC.Controllers
                 {
                     if(chatMessage is AssistantChatMessage)
                     {
-                       
-                        
-                        
                             bool exists = viewModel.AssistantChatMessages.Any(m=> m.Message==chatMessage.Content[0].Text.ToString());
                             if (!exists)
                             {
@@ -159,34 +158,25 @@ namespace BookingMVC.Controllers
 
                                var allHotels =  _hotelRepository.GetAllHotels();
 
-                            foreach (var hotel in allHotels)
-                            {
+                             foreach (var hotel in allHotels)
+                             {
                                 if (chatMessage.Content[0].Text.ToString().Contains(hotel.Name))
                                 {
                                     assistantChatItem.Hotel = _hotelRepository.GetHotelByName(hotel.Name);
-
                                 }
 
-                            }
-
+                             }
                                viewModel.AssistantChatMessages.Add(assistantChatItem);
-
                             }
-                        
-
- 
                     }
                     else if(chatMessage is UserChatMessage)
                     {
-                        
-                      
                             bool exists = viewModel.UserChatMessages.Contains(chatMessage.Content[0].Text.ToString());
                               if (!exists)
                                 {
                                     viewModel.UserChatMessages.Add(chatMessage.Content[0].Text.ToString());
                                 }
                     }
-                    
                 }
             }
             chatBotViewModel.AssistantChatMessages = viewModel.AssistantChatMessages;

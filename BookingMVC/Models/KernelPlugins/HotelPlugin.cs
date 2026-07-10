@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using BookingMVC.Models.Repositories;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.SemanticKernel;
 using System.ComponentModel;
 using System.Text;

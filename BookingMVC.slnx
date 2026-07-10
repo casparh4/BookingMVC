@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="BookingMVC/BookingMVC.csproj" />
+  <Project Path="BookingTests/BookingTests.csproj" Id="2fb9f946-875c-436e-9eff-192726fbee1d" />
 </Solution>

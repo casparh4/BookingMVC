@@ -1,20 +1,55 @@
-﻿@model Booking
+﻿@model FlightViewModel
 <div style="width:70%; float:left">
-<h1> Thank you for booking with us @Model.FirstName!</h1>
-<h4>your stay at @Model.Hotel.Name has been saved from @Model.Arrival.ToString("yyyy-MM-dd") - @Model.Leaving.ToString("yyyy-MM-dd")</h4>
+<h1> Thank you for booking with us @Model.Booking.FirstName!</h1>
+<h4>your stay at @Model.Booking.Hotel.Name has been saved from @Model.Booking.Arrival.ToString("yyyy-MM-dd") - @Model.Booking.Leaving.ToString("yyyy-MM-dd")</h4>
 
-<h4>Total Cost: @Model.TotalCost.ToString("c")</h4>
-<p>please check your inbox for your email: @Model.Email for more information</p>
+<h4>Total Cost: @Model.Booking.TotalCost.ToString("c")</h4>
+<p>please check your inbox for your email: @Model.Booking.Email for more information</p>
 
-<h4>to confirm your booking, please proceed to payment</h4>
-    <div>
-        <p class="button" height="100" width="300">
-            <a class="btn btn-secondary">Pay Now</a>
-        </p>
-    </div>
 </div>
 
 
 <div style="width:30%; float:right">
-    <img src="@Model.Hotel.ImageUrl" />
+    <img src="@Model.Booking.Hotel.ImageUrl" />
 </div>
+
+<form asp-action="BookingConfirmationWithFlights" asp-route-id="@Model.Booking.BookingId" method="post" role="form">
+    <input type="submit" class="btn btn-secondary" value="View Flights to @Model.Booking.Hotel.City on @Model.Booking.Arrival.ToString("yyyy-MM-dd")" />
+</form>
+
+@if (Model.Flights.data != null)
+{
+    <table class="flights-table">
+        <tr>
+            <th>AirLine</th>
+            <th>Aircraft</th>
+            <th>Departure Airport IATA</th>
+            <th>Departure time</th>
+            <th>Arrival Airport IATA</th>
+            <th>Arrival Time</th>
+        </tr>
+        @if(Model.Flights.data!=null)
+        {
+            @for (int i = 0; i < Model.Flights.data.Count(); i++)
+            {
+                <tr>
+                    <th>@Model.Flights.data[i].airline.name</th>
+                    <th>@Model.Flights.data[i].aircraft.modelText</th>
+                    <th>@Model.Flights.data[i].departure.iataCode.ToUpper()</th>
+                    <th>@Model.Flights.data[i].departure.scheduledTime</th>
+                    <th>@Model.Flights.data[i].arrival.iataCode.ToUpper()</th>
+                    <th>@Model.Flights.data[i].arrival.scheduledTime</th>
+                </tr>
+            }
+        }
+
+    </table>
+    <a asp-route-offset="@(Model.Offset -1)" asp-route-showFlights="true">Previous</a>
+    <a asp-route-offset = "@(Model.Offset + 1)" asp-route-showFlights="true">Next</a>
+
+    <div class="plane-images">
+    <img src="https://tse4.mm.bing.net/th/id/OIP.LZrGh9noU86Exl1h5N2avQHaBO?w=368&h=60&c=7&r=0&o=7&pid=1.7&rm=3" />
+        <img src="https://tse4.mm.bing.net/th/id/OIP.O7WWXDar8cxnFwEWCbMXkAHaCv?w=318&h=129&c=7&r=0&o=7&pid=1.7&rm=3" />
+        <img src="https://tse1.mm.bing.net/th/id/OIP.hZFp-lc-KjChG4fEXroU8QHaHa?w=213&h=180&c=7&r=0&o=7&pid=1.7&rm=3" />
+    </div>
+}

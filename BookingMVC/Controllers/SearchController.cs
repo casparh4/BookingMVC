@@ -1,5 +1,7 @@
 ﻿using BookingMVC.Models;
 using BookingMVC.Models.KernelPlugins;
+using BookingMVC.Models.POCOs;
+using BookingMVC.Models.Repositories;
 using BookingMVC.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;

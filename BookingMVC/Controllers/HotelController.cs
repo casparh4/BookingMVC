@@ -1,5 +1,6 @@
 ﻿
 using BookingMVC.Models;
+using BookingMVC.Models.Repositories;
 using BookingMVC.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -19,17 +20,16 @@ namespace BookingMVC.Controllers
     {
 
         private readonly IHotelRepository _hotelRepository;
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly IOptions<ModelSettings> _modelSettings;
-        private readonly OpenAIClient _aiClient;
-        public HotelController(IHotelRepository hotelRepository, UserManager<IdentityUser> userManager, IOptions<ModelSettings> modelSettings, OpenAIClient aiClient)
+        private readonly UserManager<IdentityUser>? _userManager;
+        private IHotelRepository @object;
+
+        public HotelController(IHotelRepository hotelRepository, UserManager<IdentityUser>? userManager)
         {
             _hotelRepository = hotelRepository;
             _userManager = userManager;
-            _aiClient = aiClient;
-            _modelSettings = modelSettings;
         }
 
+       
 
         [HttpPost]
         public async Task<IActionResult> UpdateReviewSummary(int id) 
@@ -45,24 +45,15 @@ namespace BookingMVC.Controllers
             var hotel = _hotelRepository.GetHotelById(id);
             if (hotel !=null)
             {
-
-
                 Review NewReview = new Review();
                 NewReview.HotelId = id;
-                if (hotel == null)
-                {
-                    return NotFound();
-                }
                 var detailsViewModel = new DetailsViewModel(hotel, NewReview);
-
                 return View(detailsViewModel);
             }
-     
             else
             {
                 throw new Exception("Hotel not found");
             }
-     
         }
 
         [Authorize]
@@ -79,22 +70,22 @@ namespace BookingMVC.Controllers
             {
                 NewReview.HotelId = hotel.HotelId;
                 var incompleteDetailsViewModel = new DetailsViewModel(hotel, NewReview);
-                
                 ViewBag.ReviewCompletionMessage = "invalid review";
                 return View(incompleteDetailsViewModel);
             }
-            var user = await _userManager.GetUserAsync(User);
-            if(user!= null)
+            if(_userManager != null)
             {
-                NewReview.Email = user.UserName;
+                var user = await _userManager.GetUserAsync(User);
+                if (user != null)
+                {
+                    NewReview.Email = user.UserName;
+                }
             }
+   
 
-            _hotelRepository.CreateReview(Id, NewReview);
-
+            _hotelRepository.CreateReview(Id, NewReview); // add a mock for this
             ViewBag.ReviewCompletionMessage = "thanks for the review!";
-
             var detailsViewModel = new DetailsViewModel(hotel, NewReview); //make a new viewmodel with just hotel and string
-
             return View(detailsViewModel); //redirect to a page with no review form and just the view message(once reviews are fixed)
         }
         

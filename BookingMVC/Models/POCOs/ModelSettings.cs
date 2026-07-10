@@ -1,4 +1,4 @@
-﻿namespace BookingMVC
+﻿namespace BookingMVC.Models.POCOs
 {
     public class ModelSettings
     {

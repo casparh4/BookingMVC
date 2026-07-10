@@ -1,10 +1,12 @@
 ﻿using BookingMVC.Models;
 using OpenAI.Chat;
+using System.ComponentModel.DataAnnotations;
 
 namespace BookingMVC.ViewModels
 {
     public class ChatBotViewModel
     {
+        [Display(Name ="Send a message to our Hotels4You assistant")]
         public string UserMessage { get; set; } = string.Empty;
         public List<AssistantChatItem> AssistantChatMessages { get; set; } = new();
         public List<string> UserChatMessages { get; set; } = new List<string>();

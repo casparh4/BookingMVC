@@ -1,4 +1,4 @@
-﻿
+﻿using BookingMVC.Models.POCOs;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -10,7 +10,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
-namespace BookingMVC.Models
+namespace BookingMVC.Models.Repositories
 {
     public class HotelRepository : IHotelRepository
     {

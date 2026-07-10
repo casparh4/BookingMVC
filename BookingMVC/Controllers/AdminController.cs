@@ -1,5 +1,7 @@
 ﻿using AspNetCoreGeneratedDocument;
 using BookingMVC.Models;
+using BookingMVC.Models.POCOs;
+using BookingMVC.Models.Repositories;
 using BookingMVC.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -38,10 +40,7 @@ namespace BookingMVC.Controllers
         
         public async Task<IActionResult> Index()
         {
-            //var user = await _userManager.GetUserAsync(User);
-            //string userString = User.ToString();
-            ////Console.WriteLine($"USER!!!!::::{userString}");
-
+           
             var hotels = _hotelRepository.GetAllHotels();
             HotelViewModel hotelViewModel = new HotelViewModel(hotels);
             

@@ -132,6 +132,8 @@ body {
     margin: 10px;
     border-radius: 30px;
     border: 30px;
+  
+
 }
 
 .bot-message {
@@ -143,8 +145,26 @@ body {
 }
 
 .bot-chat {
-    position: static;
-    bottom: 70px;
+    position: fixed;
+    bottom: 60px;
     left: 200px;
     width: 80%;
+
 }
+
+.flights-table {
+    border-width: 1px;
+    border-color: red;
+    padding: 20px;
+    border: double;
+}
+
+.flights-table, th{
+    text-decoration-style:double;
+    border:double;
+    border-spacing:10px;
+   
+    background-color:mintcream;
+}
+
+

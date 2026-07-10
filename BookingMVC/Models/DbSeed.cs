@@ -20,7 +20,10 @@ namespace BookingMVC.Models
                       Country = "UK",
                       City = "London",
                       Price = 250m,
-                      Rating = 5
+                      Rating = 5,
+                      AirportAitaCode = "LHR",
+                      Rooms = 10
+
                     },
                     new Hotel
                     {
@@ -30,7 +33,9 @@ namespace BookingMVC.Models
                        Country = "Spain",
                        City = "Barcelona",
                        Price = 180m,
-                       Rating = 4
+                       Rating = 4,
+                       AirportAitaCode = "BLA",
+                       Rooms = 5
                     },
                     new Hotel
                     {
@@ -40,7 +45,8 @@ namespace BookingMVC.Models
                         Country = "Switzerland",
                         City = "Zermatt",
                         Price = 300m,
-                        Rating = 5
+                        Rating = 5,
+                        AirportAitaCode = "ZRH"
                     },
                     new Hotel
                     {
@@ -50,7 +56,9 @@ namespace BookingMVC.Models
                         Country = "UK",
                         City = "Manchester",
                         Price = 75m,
-                        Rating = 3
+                        Rating = 3,
+                        AirportAitaCode = "MAN",
+                        Rooms = 20
                     },
                     new Hotel
                     {
@@ -60,7 +68,9 @@ namespace BookingMVC.Models
                        Country = "USA",
                        City = "New York",
                        Price = 220m,
-                       Rating = 4
+                       Rating = 4,
+                       AirportAitaCode = "NYC",
+                       Rooms = 3
                     },
                     new Hotel
                     {
@@ -70,7 +80,9 @@ namespace BookingMVC.Models
                         Country = "Canada",
                         City = "Toronto",
                        Price = 160m,
-                       Rating = 4
+                       Rating = 4,
+                       AirportAitaCode = "YYZ",
+                       Rooms = 2
                     },
                     new Hotel
                     {
@@ -80,7 +92,9 @@ namespace BookingMVC.Models
                        Country = "UAE",
                        City = "Dubai",
                        Price = 350m,
-                       Rating = 5
+                       Rating = 5,
+                       AirportAitaCode = "DST",
+                       Rooms = 15
                     },
                     new Hotel
                     {
@@ -90,9 +104,11 @@ namespace BookingMVC.Models
                        Country = "Italy",
                        City = "Rome",
                        Price = 200m,
-                       Rating = 4
+                       Rating = 4,
+                       AirportAitaCode = "FCO",
+                       Rooms = 5
                     }
-                   
+
                 });
                 context.SaveChanges();
             }
