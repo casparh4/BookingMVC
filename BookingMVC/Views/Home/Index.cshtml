@@ -2,8 +2,17 @@
     ViewData["Title"] = "HotelsForyou";
 }
 @model HotelViewModel
-<div class="text-center">
-    <h1 class="display-4">Welcome to HotelsForYou</h1>
+
+<div class="home-page">
+    <section class="home-hero">
+        <h1>Find your next stay</h1>
+        <p>Browse hotels, check availability and book in a few clicks.</p>
+        <a href="#hotels" class="hero-btn">Browse hotels</a>
+    </section>
+
+    <div class="section-head" id="hotels">
+        <h2>Hotels</h2>
+        <span>@Model.Hotels.Count() places to stay</span>
 </div>
 <hr />
 <h2> Hotels</h2>

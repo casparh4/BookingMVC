@@ -2,12 +2,11 @@
 
 <a asp-controller="Hotel"
    asp-action="Details"
-   asp-route-id="@Model.HotelId"
-   style="text-decoration:none; color:inherit">
-<div>
-    <h2>@Model.Name</h2>
-    <h3><img src="@Model.ImageUrl" height="200" width="200" /></h3>
-    <h4>@Model.City, @Model.Country</h4>
+   asp-route-id="@Model.HotelId">
+    <img class="hotel-card__img" src="@Model.ImageUrl" alt="@Model.Name" loading="lazy" />
+    <div class="hotel-card__body">
+        <h3 class="hotel-card__name">@Model.Name</h3>
+        <p class="hotel-card__location">@Model.City, @Model.Country</p>
 </div>
 </a>
 
